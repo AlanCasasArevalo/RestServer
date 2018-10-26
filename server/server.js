@@ -13,10 +13,18 @@ app.get('/user', function(req, res) {
 app.post('/user', function(req, res) {
 
     const body = req.body;
+    
+    if (body.name === undefined){
+        res.status(400).json({
+            result: false,
+            message : 'name is necessary'
+        })
+    } else {
+        res.json({
+            body
+        })
+    }
 
-    res.json({
-        body
-    })
 })
 
 app.put('/user/:id', function(req, res) {
