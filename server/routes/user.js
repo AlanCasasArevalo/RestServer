@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const User = require('../models/user')
+const bcrypt = require('bcrypt');
+
 
 app.get('/user', function(req, res) {
     res.json('GET user')
@@ -10,11 +12,12 @@ app.get('/user', function(req, res) {
 app.post('/user', function(req, res) {
 
     const body = req.body;
+    let salt = 10;
 
     let user = new User({
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: bcrypt.hashSync(body.password, salt),
         role: body.role
     });
 
@@ -25,7 +28,7 @@ app.post('/user', function(req, res) {
                 error
             })
         }
-
+        
         res.json({
             result: true,
             userDataBase
