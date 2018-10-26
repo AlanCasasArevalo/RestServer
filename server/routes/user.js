@@ -28,7 +28,7 @@ app.post('/user', function(req, res) {
                 error
             })
         }
-        
+
         res.json({
             result: true,
             userDataBase
@@ -41,9 +41,23 @@ app.post('/user', function(req, res) {
 app.put('/user/:id', function(req, res) {
     let id = req.params.id;
 
-    res.json({
-        id
-    })
+    let body = req.body;
+
+    User.findByIdAndUpdate(id, body, { new: true }, (error, userDataBase) => {
+
+        if (error){
+            return res.status(400).json({
+                result: false,
+                error
+            })
+        }
+
+        res.json({
+            result: true,
+            user: userDataBase
+        })
+    });
+
 });
 
 app.delete('/user', function(req, res) {
