@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 
 app.use(require('./routes/user'))
 
-mongoose.connect('mongodb://localhost:27017/cafe', (error, response) => {
+mongoose.connect(process.env.URLDDBB , (error, response) => {
     if (error) throw error
 
     console.log('Base de datos OK')

@@ -17,7 +17,7 @@ app.get('/user', function(req, res) {
     limit = Number(limit);
 
     // Podemos excluir campos simplemente metiendolos entre las tildes.
-    User.find({}, 'name email img role status google')
+    User.find({ status: true }, 'name email img role status google')
         // hace que me vaya devolviendo usuarios de 5 en 5
         .skip(fromSkip)
         // Cambia el limite de usuarios devueltos
@@ -30,7 +30,7 @@ app.get('/user', function(req, res) {
                 })
             }
 
-            User.count({}, (error, count) => {
+            User.count({ status: true }, (error, count) => {
                 if (error){
                     return res.status(400).json({
                         result: false,
@@ -108,7 +108,13 @@ app.delete('/user/:id', function(req, res) {
 
     let id = req.params.id;
 
-    User.findByIdAndRemove(id, (error, userDeleted) => {
+    let statusChange = {
+        status: false
+    }
+
+    User.findByIdAndUpdate(id, statusChange,{
+        new: true,
+    },(error, userDeleted) => {
         if (error){
             return res.status(400).json({
                 result: false,
