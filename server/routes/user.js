@@ -7,7 +7,21 @@ const _ = require('underscore');
 
 app.get('/user', function(req, res) {
 
+    // permite ir haciendo paginacion
+    let fromSkip = req.query.from || 0;
+
+    fromSkip = Number(fromSkip);
+
+    let limit = req.query.limit || 5;
+
+    limit = Number(limit);
+
+
     User.find({})
+        // hace que me vaya devolviendo usuarios de 5 en 5
+        .skip(fromSkip)
+        // Cambia el limite de usuarios devueltos
+        .limit(limit)
         .exec( (error, users) => {
             if (error){
                 return res.status(400).json({
