@@ -2,42 +2,19 @@ require('./config/config')
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
-app.get('/user', function(req, res) {
-    res.json('GET user')
-});
+app.use(require('./routes/user'))
 
-app.post('/user', function(req, res) {
+mongoose.connect(process.env.URLDDBB , (error, response) => {
+    if (error) throw error
 
-    const body = req.body;
-    
-    if (body.name === undefined){
-        res.status(400).json({
-            result: false,
-            message : 'name is necessary'
-        })
-    } else {
-        res.json({
-            body
-        })
-    }
+    console.log('Base de datos OK')
 
-});
-
-app.put('/user/:id', function(req, res) {
-    let id = req.params.id;
-
-    res.json({
-        id
-    })
-});
-
-app.delete('/user', function(req, res) {
-    res.json('DELETE user')
 });
 
 app.listen(process.env.PORT, function () {
