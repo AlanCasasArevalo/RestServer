@@ -6,7 +6,22 @@ const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
 app.get('/user', function(req, res) {
-    res.json('GET user')
+
+    User.find({})
+        .exec( (error, users) => {
+            if (error){
+                return res.status(400).json({
+                    result: false,
+                    error
+                })
+            }
+
+            res.json({
+                result: true,
+                users
+            })
+        })
+
 });
 
 app.post('/user', function(req, res) {
@@ -43,10 +58,6 @@ app.put('/user/:id', function(req, res) {
 
     //_.pick Permite decirle a put que parametros pueden ser modificados.
     let body = _.pick( req.body, ['name', 'email', 'img', 'role', 'status'] );
-
-
-
-
 
     User.findByIdAndUpdate(id, body, {
         new: true,
