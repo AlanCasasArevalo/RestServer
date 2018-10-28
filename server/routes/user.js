@@ -1,9 +1,9 @@
 
 const express = require('express');
 const app = express();
-const User = require('../models/user')
+const User = require('../models/user');
 const bcrypt = require('bcrypt');
-
+const _ = require('underscore');
 
 app.get('/user', function(req, res) {
     res.json('GET user')
@@ -41,9 +41,17 @@ app.post('/user', function(req, res) {
 app.put('/user/:id', function(req, res) {
     let id = req.params.id;
 
-    let body = req.body;
+    //_.pick Permite decirle a put que parametros pueden ser modificados.
+    let body = _.pick( req.body, ['name', 'email', 'img', 'role', 'status'] );
 
-    User.findByIdAndUpdate(id, body, { new: true }, (error, userDataBase) => {
+
+
+
+
+    User.findByIdAndUpdate(id, body, {
+        new: true,
+        runValidators: true
+    }, (error, userDataBase) => {
 
         if (error){
             return res.status(400).json({
