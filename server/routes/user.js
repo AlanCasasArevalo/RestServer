@@ -17,7 +17,8 @@ app.get('/user', function(req, res) {
     limit = Number(limit);
 
 
-    User.find({})
+    // Podemos excluir campos simplemente metiendolos entre las tildes.
+    User.find({}, 'name email')
         // hace que me vaya devolviendo usuarios de 5 en 5
         .skip(fromSkip)
         // Cambia el limite de usuarios devueltos
@@ -30,10 +31,21 @@ app.get('/user', function(req, res) {
                 })
             }
 
-            res.json({
-                result: true,
-                users
-            })
+            User.count({}, (error, count) => {
+                if (error){
+                    return res.status(400).json({
+                        result: false,
+                        error
+                    })
+                }
+
+                res.json({
+                    result: true,
+                    users,
+                    count
+                })
+            });
+
         })
 
 });
