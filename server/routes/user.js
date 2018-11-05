@@ -4,16 +4,10 @@ const app = express();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-const { tokenVerification } = require('../middlewares/authentication.js')
+const { tokenVerification, adminRoleVerification } = require('../middlewares/authentication.js')
 
 
-app.get('/user', tokenVerification, function(req, res) {
-
-    return res.json({
-        user: req.user,
-        name: req.user.name,
-        email: req.user.email,
-    });
+app.get('/users', tokenVerification, function(req, res) {
 
     // permite ir haciendo paginacion
     let fromSkip = req.query.from || 0;
@@ -57,7 +51,7 @@ app.get('/user', tokenVerification, function(req, res) {
 
 });
 
-app.post('/user', tokenVerification, function(req, res) {
+app.post('/user', [tokenVerification, adminRoleVerification], function(req, res) {
 
     const body = req.body;
     let salt = 10;
@@ -86,7 +80,7 @@ app.post('/user', tokenVerification, function(req, res) {
 
 });
 
-app.put('/user/:id', tokenVerification, function(req, res) {
+app.put('/user/:id', [tokenVerification, adminRoleVerification], function(req, res) {
     let id = req.params.id;
 
     //_.pick Permite decirle a put que parametros pueden ser modificados.
@@ -112,7 +106,7 @@ app.put('/user/:id', tokenVerification, function(req, res) {
 
 });
 
-app.delete('/user/:id', tokenVerification, function(req, res) {
+app.delete('/user/:id', [tokenVerification, adminRoleVerification], function(req, res) {
 
     let id = req.params.id;
 

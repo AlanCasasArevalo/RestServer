@@ -25,9 +25,31 @@ let tokenVerification = ( req, res, next ) => {
 
 };
 
+//********************
+//  Verificafion de Administracion
+// ********************//
+
+let adminRoleVerification = ( req, res, next ) => {
+    
+    let user = req.user;
+
+    if (user.role === 'USER_ROLE'){
+        return res.status(401).json({
+            result: false,
+            error: {
+                message: 'El usuario no es administrador'
+            }
+        })
+    }else {
+        next();
+    }
+
+};
+
 
 module.exports = {
-    tokenVerification
+    tokenVerification,
+    adminRoleVerification
 };
 
 
