@@ -18,7 +18,7 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev'
 
 let urlDDBB = '';
 
-if (process.env.NODE_ENV === 'dev'){
+if (process.env.NODE_ENV === 'dev') {
     urlDDBB = 'mongodb://localhost:27017/cafe'
 } else {
     urlDDBB = process.env.MONGO_URL
@@ -27,5 +27,13 @@ if (process.env.NODE_ENV === 'dev'){
 process.env.URLDDBB = urlDDBB;
 
 
+//********************
+//  Vencimiento de token
+// ********************//
 
+process.env.TOKEN_END_VALIDATION = 60 * 60 * 24 * 30;
 
+//********************
+//  SEED de autenticacion.
+// ********************//
+process.env.SEED = process.env.SEED || 'develop-secret-seed';
