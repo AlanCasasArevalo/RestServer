@@ -31,7 +31,7 @@ process.env.URLDDBB = urlDDBB;
 //  Vencimiento de token
 // ********************//
 
-process.env.TOKEN_END_VALIDATION = 60 * 60 * 24;
+process.env.TOKEN_END_VALIDATION = 60 * 60 * 24 * 30;
 
 //********************
 //  SEED de autenticacion.

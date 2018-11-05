@@ -4,9 +4,10 @@ const app = express();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
+const { tokenVerification } = require('../middlewares/authentication.js')
 
 
-app.get('/user', function(req, res) {
+app.get('/user', tokenVerification, function(req, res) {
 
     // permite ir haciendo paginacion
     let fromSkip = req.query.from || 0;
