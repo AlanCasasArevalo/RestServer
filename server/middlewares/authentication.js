@@ -11,8 +11,9 @@ let tokenVerification = ( req, res, next ) => {
         if (error) {
             return res.status(401).json({
                 result: false,
-                error,
-                message: 'El token no es valido'
+                error: {
+                    message: 'El token no es valido'
+                }
             })
         }
 
