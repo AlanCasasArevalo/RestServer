@@ -5,6 +5,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 
+
 app.get('/user', function(req, res) {
 
     // permite ir haciendo paginacion
