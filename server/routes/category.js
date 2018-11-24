@@ -1,7 +1,6 @@
 const express = require('express');
-let { tokenVerification } = require('../middlewares/authentication');
+let { tokenVerification, adminRoleVerification } = require('../middlewares/authentication');
 let app = express();
-const User = require('../models/user');
 const Category = require('../models/category');
 const _ = require('underscore');
 
@@ -56,9 +55,18 @@ app.get('/category/:id', (req, res) => {
 
     Category.findById( id, (error, category) =>{
         if (error){
-            return res.status(400).json({
+            return res.status(500).json({
                 result: false,
                 error
+            })
+        }
+
+        if (!category){
+            return res.status(400).json({
+                result: false,
+                error: {
+                    message: 'El id mandado no es correcto'
+                }
             })
         }
 
@@ -74,17 +82,23 @@ app.get('/category/:id', (req, res) => {
 /************************************************************************************
 * CREAR LA CATEGORIA
 *************************************************************************************/
-app.post('/category', (req, res) => {
-    // devolver la categoria
-    // req.user._id
-    const body = req.body;
+app.post('/category', tokenVerification, (req, res) => {
+    let body = req.body;
 
     let category = new Category({
-        name: body.name,
+        description: body.description,
+        user: req.user._id
     });
 
     category.save( (error, categoryDataBase) => {
        if (error){
+           return res.status(500).json({
+               result : false,
+               error
+           })
+       }
+
+       if (!categoryDataBase){
            return res.status(400).json({
                result : false,
                error
@@ -108,7 +122,7 @@ app.put('/category/:id', tokenVerification, (req, res) => {
     // req.user._id
 
     let id = req.params.id;
-    let body = _.pick( req.body, ['name'] );
+    let body = _.pick( req.body, ['description'] );
 
     Category.findByIdAndUpdate(id, body, {
         new: true,
@@ -118,6 +132,15 @@ app.put('/category/:id', tokenVerification, (req, res) => {
             return res.status(400).json({
                 result: false,
                 error
+            })
+        }
+
+        if (!categoryDataBase){
+            return res.status(400).json({
+                result : false,
+                error: {
+                    message: 'El id requerido no es correcto'
+                }
             })
         }
 
@@ -133,10 +156,7 @@ app.put('/category/:id', tokenVerification, (req, res) => {
 /************************************************************************************
 * BORRA LA CATEGORIA
 *************************************************************************************/
-app.delete('/category/:id', tokenVerification, (req, res) => {
-    // solo admin puede borrar
-    // tiene que ser solo si tiene un token
-    // category.findByIdAndRemote
+app.delete('/category/:id', [tokenVerification, adminRoleVerification], (req, res) => {
 
     let id = req.params.id;
 
@@ -158,7 +178,7 @@ app.delete('/category/:id', tokenVerification, (req, res) => {
             return res.status(400).json({
                 result: false,
                 error: {
-                    message: 'Categoria no encontrado.'
+                    message: 'ID de categoria no encontrado.'
                 }
             })
         }
