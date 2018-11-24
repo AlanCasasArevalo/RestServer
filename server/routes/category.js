@@ -16,6 +16,12 @@ app.get('/category', (req, res) => {
     limit = Number(limit);
 
     Category.find()
+    // sort ordena los elementos por el elemento elegido description, id fecha lo que quieras
+        .sort('description')
+        // Al pasar populate lo que hacemos es recibir todos los elementos del usuario que los creo
+        // .populate('user')
+        // se puede pasar especificamente parametros a mostrar obviando el resto
+        .populate('user', 'name email role')
         .skip(fromSkip)
         .limit(limit)
         .exec(( error, categories ) => {
@@ -118,7 +124,7 @@ app.post('/category', tokenVerification, (req, res) => {
 * ACTUALIZA LA CATEGORIA
 *************************************************************************************/
 app.put('/category/:id', tokenVerification, (req, res) => {
-    // devolver la categoria
+    // devolver la category
     // req.user._id
 
     let id = req.params.id;
@@ -178,7 +184,7 @@ app.delete('/category/:id', [tokenVerification, adminRoleVerification], (req, re
             return res.status(400).json({
                 result: false,
                 error: {
-                    message: 'ID de categoria no encontrado.'
+                    message: 'ID de category no encontrado.'
                 }
             })
         }
