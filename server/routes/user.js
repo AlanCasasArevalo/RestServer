@@ -4,8 +4,7 @@ const app = express();
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
-const { tokenVerification, adminRoleVerification } = require('../middlewares/authentication.js')
-
+const { tokenVerification, adminRoleVerification } = require('../middlewares/authentication.js');
 
 app.get('/users', tokenVerification, function(req, res) {
 
@@ -40,7 +39,7 @@ app.get('/users', tokenVerification, function(req, res) {
                     })
                 }
 
-                res.json({
+                res.status(200).json({
                     result: true,
                     users,
                     count
@@ -51,7 +50,8 @@ app.get('/users', tokenVerification, function(req, res) {
 
 });
 
-app.post('/user', [tokenVerification, adminRoleVerification], function(req, res) {
+// app.post('/user', [tokenVerification, adminRoleVerification], function(req, res) {
+app.post('/user', function(req, res) {
 
     const body = req.body;
     let salt = 10;
@@ -71,7 +71,7 @@ app.post('/user', [tokenVerification, adminRoleVerification], function(req, res)
             })
         }
 
-        res.json({
+        res.status(200).json({
             result: true,
             userDataBase
         })
@@ -98,7 +98,7 @@ app.put('/user/:id', [tokenVerification, adminRoleVerification], function(req, r
             })
         }
 
-        res.json({
+        res.status(200).json({
             result: true,
             user: userDataBase
         })
@@ -112,7 +112,7 @@ app.delete('/user/:id', [tokenVerification, adminRoleVerification], function(req
 
     let statusChange = {
         status: false
-    }
+    };
 
     User.findByIdAndUpdate(id, statusChange,{
         new: true,
@@ -133,7 +133,7 @@ app.delete('/user/:id', [tokenVerification, adminRoleVerification], function(req
             })
         }
 
-        res.json({
+        res.status(200).json({
             result: true,
             userDeleted
         })
