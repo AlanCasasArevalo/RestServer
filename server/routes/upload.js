@@ -1,10 +1,10 @@
 const express = require('express');
-const fileUpload = require('express-fileupload');
 const app = express();
+const fs = require('fs');
+const fileUpload = require('express-fileupload');
 const User = require('../models/user');
 const Product = require('../models/product');
 const path = require('path');
-const fs = require('fs');
 
 app.use(fileUpload());
 
