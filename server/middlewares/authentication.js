@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 //********************
 //  Verificafion de token
 // ********************//
-
 let tokenVerification = ( req, res, next ) => {
     let token = req.get('Authorization');
 
@@ -28,7 +27,6 @@ let tokenVerification = ( req, res, next ) => {
 //********************
 //  Verificafion de Administracion
 // ********************//
-
 let adminRoleVerification = ( req, res, next ) => {
     
     let user = req.user;
@@ -46,10 +44,34 @@ let adminRoleVerification = ( req, res, next ) => {
 
 };
 
+//********************
+//  Verificafion de token
+// ********************//
+let tokenImageVerification = ( req, res, next ) => {
+
+    let token = req.query.token;
+
+    jwt.verify( token, process.env.SEED, ( error, decoded ) => {
+        if (error) {
+            return res.status(401).json({
+                result: false,
+                error: {
+                    message: 'El token no es valido'
+                }
+            })
+        }
+
+        req.user = decoded.user;
+        next();
+
+    });
+
+};
 
 module.exports = {
     tokenVerification,
-    adminRoleVerification
+    adminRoleVerification,
+    tokenImageVerification
 };
 
 

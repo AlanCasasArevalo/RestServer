@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const path = require('path');
-let { tokenVerification } = require('../middlewares/authentication');
+let { tokenImageVerification } = require('../middlewares/authentication');
 
-app.get('/image/:type/:image', tokenVerification, (req, res) =>{
+app.get('/image/:type/:image', tokenImageVerification, (req, res) =>{
 
     let type = req.params.type;
     let image = req.params.image;
